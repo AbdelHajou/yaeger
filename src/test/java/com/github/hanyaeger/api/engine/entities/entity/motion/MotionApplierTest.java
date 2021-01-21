@@ -1,9 +1,6 @@
-package com.github.hanyaeger.api.engine.entities.entity.motion.impl;
+package com.github.hanyaeger.api.engine.entities.entity.motion;
 
-import com.github.hanyaeger.api.engine.entities.entity.motion.MotionApplier;
-import com.github.hanyaeger.api.engine.entities.entity.motion.Direction;
 import javafx.geometry.Point2D;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +11,10 @@ class MotionApplierTest {
     private static final double DELTA = 0.00001d;
     private static final Point2D DEFAULT_START_LOCATION = new Point2D(0, 0);
     private static final Point2D DEFAULT_MOVEMENT_UP = new Point2D(0, 1);
+    private static final double FRICTION_CONSTANT = 0.37;
+    private static final double GRAVITATIONAL_CONSTANT = 0.42;
+    private static final double GRAVITATIONAL_DIRECTION = Direction.DOWN.getValue();
+    private static final boolean GRAVITATIONAL_PULL = false;
 
     private static final double SPEED_MULTIPLACTION_FRACTION = 0.5;
     private static final Direction DIRECTION_ENUM = Direction.RIGHT;
@@ -43,28 +44,6 @@ class MotionApplierTest {
     }
 
     @Test
-    void newInstanceHasEmptyPreviousLocation() {
-        // Arrange
-
-        // Act
-
-        // Assert
-        assertTrue(sut.getPreviousLocation().isEmpty());
-    }
-
-    @Test
-    void setHaltedIsStored() {
-        // Arrange
-        sut.setHalted(true);
-
-        // Act
-        var halted = sut.isHalted();
-
-        // Assert
-        assertTrue(halted);
-    }
-
-    @Test
     void speedWithNoAngleDefaultsToDirectionOfZero() {
         // Arrange
         sut.setMotion(1, Direction.DOWN.getValue());
@@ -79,14 +58,47 @@ class MotionApplierTest {
     }
 
     @Test
-    void multiplySpeedOfZeroFreezesMotion() {
+    void setFrictionConstantStoresFriction() {
         // Arrange
 
         // Act
-        sut.multiplySpeed(0);
+        sut.setFrictionConstant(FRICTION_CONSTANT);
 
         // Assert
-        assertEquals(0, sut.get().magnitude());
+        assertEquals(FRICTION_CONSTANT, sut.getFrictionConstant());
+    }
+
+    @Test
+    void setGravityConstantStoresGravity() {
+        // Arrange
+
+        // Act
+        sut.setGravityConstant(GRAVITATIONAL_CONSTANT);
+
+        // Assert
+        assertEquals(GRAVITATIONAL_CONSTANT, sut.getGravityConstant());
+    }
+
+    @Test
+    void setGravitationalDirectionStoresDirection() {
+        // Arrange
+
+        // Act
+        sut.setGravityDirection(GRAVITATIONAL_DIRECTION);
+
+        // Assert
+        assertEquals(GRAVITATIONAL_DIRECTION, sut.getGravityDirection());
+    }
+
+    @Test
+    void setFGravitationalPullStoresPull() {
+        // Arrange
+
+        // Act
+        sut.setGravitationalPull(GRAVITATIONAL_PULL);
+
+        // Assert
+        assertEquals(GRAVITATIONAL_PULL, sut.isGravitationalPull());
     }
 
     @Test
@@ -137,34 +149,6 @@ class MotionApplierTest {
         // Assert
         assertEquals(0, sut.get().getX(), DELTA);
         assertEquals(1, sut.get().getY(), DELTA);
-    }
-
-    @Test
-    void setSpeedToZeroFreezesLocationIfPreviousSpeedNotZero() {
-        // Arrange
-        sut.setMotion(1, Direction.UP.getValue());
-
-        // Act
-        sut.setSpeed(0);
-
-        // Assert
-        assertEquals(DEFAULT_START_LOCATION.getX(), sut.get().getX(), DELTA);
-        assertEquals(DEFAULT_START_LOCATION.getY(), sut.get().getY(), DELTA);
-        assertTrue(sut.isHalted());
-    }
-
-    @Test
-    void setSpeedToZeroFreezesLocationButNotHaltedIfPreviousSpeedZero() {
-        // Arrange
-        sut.setMotion(0, Direction.UP.getValue());
-
-        // Act
-        sut.setSpeed(0);
-
-        // Assert
-        assertEquals(DEFAULT_START_LOCATION.getX(), sut.get().getX(), DELTA);
-        assertEquals(DEFAULT_START_LOCATION.getY(), sut.get().getY(), DELTA);
-        assertFalse(sut.isHalted());
     }
 
     @Test
@@ -298,7 +282,7 @@ class MotionApplierTest {
     }
 
     @Test
-    void setDirectionWithZeroSpeedCreatesZeroVector(){
+    void setDirectionWithZeroSpeedCreatesZeroVector() {
         // Arrange
 
         // Act
@@ -310,7 +294,7 @@ class MotionApplierTest {
     }
 
     @Test
-    void setSpeedAfterDirectionCreatesCorrectVector(){
+    void setSpeedAfterDirectionCreatesCorrectVector() {
         // Arrange
         sut.setDirection(Direction.UP);
 
@@ -323,7 +307,7 @@ class MotionApplierTest {
     }
 
     @Test
-    void setSpeedBeforeDirectionCreatesCorrectVector(){
+    void setSpeedBeforeDirectionCreatesCorrectVector() {
         // Arrange
         sut.setSpeed(1);
 
@@ -336,7 +320,7 @@ class MotionApplierTest {
     }
 
     @Test
-    void resetSpeedAfterSpeedHasBeenSetToZeroCreatesCorrectVector(){
+    void resetSpeedAfterSpeedHasBeenSetToZeroCreatesCorrectVector() {
         // Arrange
         sut.setSpeed(1);
         sut.setDirection(Direction.UP);
@@ -474,16 +458,38 @@ class MotionApplierTest {
     }
 
     @Test
-    void getPreviousLocationReturnsPreviousLocation() {
+    void addToMotionOfOppositeVectorsResultInZeroVector() {
         // Arrange
-        var expected = new Point2D(37, 42);
-        sut.setMotion(4, Direction.DOWN.getValue());
+        sut.setMotion(1, Direction.DOWN);
 
         // Act
-        sut.updateLocation(expected);
-        var actual = sut.getPreviousLocation().get();
+        sut.addToMotion(1, Direction.UP.getValue());
 
-        // Assert
-        Assertions.assertEquals(expected, actual);
+        // Arrange
+        assertEquals(0, sut.getSpeed(), DELTA);
+    }
+
+    @Test
+    void addToMotionWithEnumOfOppositeVectorsResultInZeroVector() {
+        // Arrange
+        sut.setMotion(1, Direction.DOWN);
+
+        // Act
+        sut.addToMotion(1, Direction.UP);
+
+        // Arrange
+        assertEquals(0, sut.getSpeed(), DELTA);
+    }
+
+    @Test
+    void addToMotionWithSameVectorsResultsInDoubleSpeed() {
+        // Arrange
+        sut.setMotion(1, Direction.UP);
+
+        // Act
+        sut.addToMotion(1, Direction.UP);
+
+        // Arrange
+        assertEquals(2, sut.getSpeed(), DELTA);
     }
 }

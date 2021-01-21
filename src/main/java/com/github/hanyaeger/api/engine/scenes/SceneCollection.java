@@ -49,6 +49,7 @@ public class SceneCollection extends LinkedHashMap<Integer, YaegerScene> impleme
         put(id, scene);
         scene.init(injector);
         scene.setStage(stage);
+        scene.setConfig(yaegerConfig);
 
         if (size() == 1) {
             firstScene = id;
@@ -137,6 +138,7 @@ public class SceneCollection extends LinkedHashMap<Integer, YaegerScene> impleme
             this.finishedSplashScreen = true;
             activateFirstScene();
         });
+        splash.setConfig(yaegerConfig);
         splash.init(injector);
         splash.setStage(stage);
         activate(splash);
