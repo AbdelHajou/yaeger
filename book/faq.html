@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="adding-entities.html"><strong aria-hidden="true">2.</strong> Adding entities</a></li><li class="chapter-item expanded "><a href="adding-scenes.html"><strong aria-hidden="true">3.</strong> Adding scenes</a></li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">4.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="commandline-arguments.html"><strong aria-hidden="true">5.</strong> Command line arguments</a></li><li class="chapter-item expanded "><a href="creating-a-game.html"><strong aria-hidden="true">6.</strong> Creating a game</a></li><li class="chapter-item expanded "><a href="entity-interactions.html"><strong aria-hidden="true">7.</strong> Entity interactions</a></li><li class="chapter-item expanded "><a href="faq.html" class="active"><strong aria-hidden="true">8.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="sounds.html"><strong aria-hidden="true">9.</strong> Sounds</a></li><li class="chapter-item expanded "><a href="timing-things.html"><strong aria-hidden="true">10.</strong> Timing things</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="creating-a-game.html"><strong aria-hidden="true">2.</strong> Creating a game</a></li><li class="chapter-item expanded "><a href="scenes.html"><strong aria-hidden="true">3.</strong> Scenes aka Levels</a></li><li class="chapter-item expanded "><a href="entities.html"><strong aria-hidden="true">4.</strong> Entities aka Game Objecta</a></li><li class="chapter-item expanded "><a href="entity-interactions.html"><strong aria-hidden="true">5.</strong> Entity interactions</a></li><li class="chapter-item expanded "><a href="timing-things.html"><strong aria-hidden="true">6.</strong> Timing things</a></li><li class="chapter-item expanded "><a href="sounds.html"><strong aria-hidden="true">7.</strong> Sounds</a></li><li class="chapter-item expanded "><a href="commandline-arguments.html"><strong aria-hidden="true">8.</strong> Command line arguments</a></li><li class="chapter-item expanded "><a href="faq.html" class="active"><strong aria-hidden="true">9.</strong> FAQ</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -168,39 +168,35 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#faq" id="faq">FAQ</a></h1>
-<p>This chapter will sum up known issues and solutions on how to bypass them. The list is likely
-not complete, so do feel free to share your findings.</p>
+<p>This chapter will sum up known issues and solutions on how to bypass them. The list is likely not complete, so do feel
+free to share your findings.</p>
 <p>Some of the issues noted here can be seen as bugs, but that does not mean they are easily resolved.</p>
 <h2><a class="header" href="#my-mp3-file-is-not-being-played" id="my-mp3-file-is-not-being-played">My MP3 file is not being played</a></h2>
-<p>For some reason, not all MP3 files are supported. If playing an MP3 file does not give any exceptions,
-but you can not hear it in game, it might be because the MP3 file is nog supported. To correct this, use
+<p>For some reason, not all MP3 files are supported. If playing an MP3 file does not give any exceptions, but you can not
+hear it in game, it might be because the MP3 file is nog supported. To correct this, use
 <a href="https://online-audio-converter.com/">a tool</a> to create an MP3 file that is supported.</p>
 <h2><a class="header" href="#an-entity-behaves-strangely-when-colliding" id="an-entity-behaves-strangely-when-colliding">An Entity behaves strangely when colliding</a></h2>
-<p>Sometimes an Entity behaves unexpected when colliding. For instance, it is set to change its direction
-on collision, but when this happens it doesn't immediately do so. First it seems to stutter a few times,
-after which it finally behaves as expected.</p>
-<p>This behaviour likely follows from the fact that the bounding box is used for collision detection, and the
-bounding box is usually larger that the Entity we can see. Especially if the Entity is a SpriteEntity containing
-a round image, the bounding box is still rectangular. When this SpriteEntity is also rotating, it is not
-unlikely that the angles of the rectangular bounding box will again cause a collision on the Game World Update after
-the first collision. Because of the second collision the Entity will again change its direction and this cycle can repeat
-itself until the Entity no longer collides.</p>
-<p>A work around could be to use a <code>CompositeEntity</code> with a smaller hit box.</p>
+<p>Sometimes an Entity behaves unexpected when colliding. For instance, it is set to change its direction on collision, but
+when this happens it doesn't immediately do so. First it seems to stutter a few times, after which it finally behaves as
+expected.</p>
+<p>This behaviour likely follows from the fact that the bounding box is used for collision detection, and the bounding box
+is usually larger that the Entity we can see. Especially if the Entity is a SpriteEntity containing a round image, the
+bounding box is still rectangular. When this SpriteEntity is also rotating, it is not unlikely that the angles of the
+rectangular bounding box will again cause a collision on the Game World Update after the first collision. Because of the
+second collision the Entity will again change its direction and this cycle can repeat itself until the Entity no longer
+collides.</p>
+<p>A workaround could be to use a <code>CompositeEntity</code> with a smaller hit box.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="entity-interactions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="commandline-arguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
-                        
-                            <a rel="next" href="sounds.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -210,15 +206,11 @@ itself until the Entity no longer collides.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="entity-interactions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="commandline-arguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
-                
-                    <a rel="next" href="sounds.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                 
             </nav>
 
