@@ -6,7 +6,6 @@ import com.github.hanyaeger.api.engine.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * A {@code SpriteAnimationDelegate} holds all responsibility related to Sprites that contain multiple images.
@@ -20,21 +19,22 @@ public class SpriteAnimationDelegate implements Updatable {
     private int currentIndex = 0;
 
     /**
-     * Create a new {@code SpriteAnimationDelegate} for the given {@link ImageView} and number of frames.
-     * After construction, the spriteIndex will be set to the first frame.
+     * Create a new {@code SpriteAnimationDelegate} for the given {@link ImageView} and number of rows and columns.
+     * After construction, the spriteIndex will be set to the first frame (first row and first column).
      *
      * @param imageView the {@link ImageView} for which the different frames should be created
-     * @param frames    the number of frames available
+     * @param rows      the number of rows available
+     * @param columns   the number of columns available
      */
-    public SpriteAnimationDelegate(final ImageView imageView, final int frames) {
+    public SpriteAnimationDelegate(final ImageView imageView, final int rows, final int columns) {
         this.imageView = imageView;
 
-        createViewPorts(frames);
+        createViewPorts(rows, columns);
         setSpriteIndex(0);
     }
 
     /**
-     * Set the index of the sprite. Since de modulus (mod frames) is used, this can be an unbounded integer.
+     * Set the index of the sprite. Since the modulus (mod frames) is used, this can be an unbounded integer.
      *
      * @param index the index to select. This index will be applied modulo the total number
      *              of frames
@@ -82,18 +82,41 @@ public class SpriteAnimationDelegate implements Updatable {
         setSpriteIndex(++currentIndex);
     }
 
-    private void createViewPorts(final int frames) {
-        var frameWidth = getFrameWidth(frames);
-        var frameHeight = imageView.getImage().getHeight();
+    private void createViewPorts(final int rows, final int columns) {
+        var frameWidth = getFrameWidth(columns);
+        var frameHeight = getFrameHeight(rows);
 
-        IntStream.range(0, frames).forEach(frame -> addViewPort(frame, frameWidth, frameHeight));
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                addViewPort(row, col, frameWidth, frameHeight);
+            }
+        }
     }
 
-    private void addViewPort(final int frame, final double frameWidth, final double frameHeight) {
-        viewports.add(new Rectangle2D(frame * frameWidth, 0, frameWidth, frameHeight));
+    private void addViewPort(final int row, final int column, final double frameWidth, final double frameHeight) {
+        viewports.add(new Rectangle2D(column * frameWidth, row * frameHeight, frameWidth, frameHeight));
     }
 
-    private double getFrameWidth(final int frames) {
-        return imageView.getImage().getWidth() / frames;
+    private double getFrameWidth(final int columns) {
+        return imageView.getImage().getWidth() / columns;
+    }
+
+    private double getFrameHeight(final int rows) {
+        return imageView.getImage().getHeight() / rows;
+    }
+
+    /**
+     * Create a new {@code SpriteAnimationDelegate} for the given {@link ImageView} and number of frames.
+     * After construction, the spriteIndex will be set to the first frame.
+     *
+     * @param imageView the {@link ImageView} for which the different frames should be created
+     * @param frames    the number of frames available
+     */
+    @Deprecated
+    public SpriteAnimationDelegate(final ImageView imageView, final int frames) {
+        this.imageView = imageView;
+
+        createViewPorts(1, frames);
+        setSpriteIndex(0);
     }
 }
