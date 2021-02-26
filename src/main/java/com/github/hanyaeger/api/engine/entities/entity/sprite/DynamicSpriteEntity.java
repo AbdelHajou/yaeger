@@ -44,23 +44,7 @@ public abstract class DynamicSpriteEntity extends SpriteEntity implements Update
      * @param resource        the url of the image file. Relative to the resources folder
      * @param initialLocation the initial {@link Coordinate2D} of this Entity
      * @param size            the {@link Size} (width and height) that should be used. The height and width divided by the
-     *                        number of frames will be used for displaying the Image and as the {@link javafx.geometry.BoundingBox} in case of collision detection.
-     * @param frames          the number of frames the Image contains. By default the first frame is loaded
-     */
-    protected DynamicSpriteEntity(final String resource, final Coordinate2D initialLocation, final Size size, final int frames) {
-        super(resource, initialLocation, size, frames);
-
-        buffer = Optional.of(new EntityMotionInitBuffer());
-    }
-
-    /**
-     * Create a new {@link DynamicSpriteEntity} for the given image resource on the given {@link Coordinate2D},
-     * with the given {@link Size}.
-     *
-     * @param resource        the url of the image file. Relative to the resources folder
-     * @param initialLocation the initial {@link Coordinate2D} of this Entity
-     * @param size            the {@link Size} (width and height) that should be used. The height and width divided by the
-     *                        number of frames will be used for displaying the Image and as the {@link javafx.geometry.BoundingBox} in case of collision detection.
+     *                        number of rows and columns will be used for displaying the Image and as the {@link javafx.geometry.BoundingBox} in case of collision detection.
      * @param rows            the number of rows the Image contains.
      * @param columns         the number of columns the Image contains.
      */

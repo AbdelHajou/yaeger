@@ -104,19 +104,4 @@ public class SpriteAnimationDelegate implements Updatable {
     private double getFrameHeight(final int rows) {
         return imageView.getImage().getHeight() / rows;
     }
-
-    /**
-     * Create a new {@code SpriteAnimationDelegate} for the given {@link ImageView} and number of frames.
-     * After construction, the spriteIndex will be set to the first frame.
-     *
-     * @param imageView the {@link ImageView} for which the different frames should be created
-     * @param frames    the number of frames available
-     */
-    @Deprecated
-    public SpriteAnimationDelegate(final ImageView imageView, final int frames) {
-        this.imageView = imageView;
-
-        createViewPorts(1, frames);
-        setSpriteIndex(0);
-    }
 }
